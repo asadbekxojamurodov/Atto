@@ -1,5 +1,5 @@
 package enums;
 
 public enum Status {
-    ACTIVE,NO_ACTIVE
+    ACTIVE,NO_ACTIVE,BLOCKED
 }

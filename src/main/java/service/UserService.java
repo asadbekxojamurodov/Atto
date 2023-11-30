@@ -6,9 +6,12 @@ import enums.Status;
 import repository.ProfileRepository;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 
 public class UserService {
     ProfileRepository profileRepository = new ProfileRepository();
+    List<ProfileDto> profileDtoList = new LinkedList<>();
 
     public ProfileDto login(ProfileDto profile) {
 
@@ -23,4 +26,13 @@ public class UserService {
 
         return profileDto;
     }
+
+    public void getAllProfileList() {
+       profileDtoList = profileRepository.getAllProfile();
+        for (ProfileDto profileDto : profileDtoList) {
+            System.out.println(profileDto);
+        }
+    }
+
+
 }

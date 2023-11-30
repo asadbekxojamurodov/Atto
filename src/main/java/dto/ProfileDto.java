@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class ProfileDto {
+    private int id;
     private String name;
     private String surname;
     private String phone;

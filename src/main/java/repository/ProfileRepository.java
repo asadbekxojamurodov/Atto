@@ -1,11 +1,14 @@
 package repository;
 
 import db.DatabaseUtil;
+import dto.CardDto;
 import dto.ProfileDto;
 import enums.ProfileRole;
 import enums.Status;
 
 import java.sql.*;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class ProfileRepository {
@@ -60,6 +63,35 @@ public class ProfileRepository {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<ProfileDto> getAllProfile(){
+        List<ProfileDto> profileDtoList = new LinkedList<>();
+
+        try {
+            Connection con = DatabaseUtil.getConnection();
+            Statement statement = con.createStatement();
+            String sql = "select * from profile";
+            ResultSet resultSet = statement.executeQuery(sql);
+
+            while (resultSet.next()) {
+                ProfileDto profileDto = new ProfileDto();
+                profileDto.setId(resultSet.getInt("id"));
+                profileDto.setName(resultSet.getString("name"));
+                profileDto.setSurname(resultSet.getString("surname"));
+                profileDto.setPhone(resultSet.getString("phone"));
+                profileDto.setPassword(resultSet.getString("password"));
+                profileDto.setCreatedDate(resultSet.getTimestamp("created_date").toLocalDateTime());
+                profileDto.setStatus(Status.valueOf(resultSet.getString("status")));
+                profileDto.setProfileRole(ProfileRole.valueOf(resultSet.getString("profile_role")));
+
+                profileDtoList.add(profileDto);
+            }
+            con.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return profileDtoList;
 
     }
 

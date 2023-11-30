@@ -2,11 +2,11 @@ package RandomUtils;
 
 import java.util.Random;
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomUtil {
-    public static Random random = new Random();
-    public static long getRandomNumber(int n,int m){
-        return random.nextLong(n,m)+1;
+    public static long getRandomNumber(long smallest,long biggest){
+        return ThreadLocalRandom.current().nextLong(smallest, biggest+1);
     }
 
 }

@@ -22,6 +22,7 @@ public class DatabaseUtil {
             Connection con = DatabaseUtil.getConnection();
             Statement statement = con.createStatement();
             String sql = "  create table if not exists Profile(" +
+                    "        id serial," +
                     "        name varchar not null," +
                     "        surname varchar not null," +
                     "        phone varchar(13) primary key," +
@@ -41,6 +42,7 @@ public class DatabaseUtil {
             Connection con = DatabaseUtil.getConnection();
             Statement statement = con.createStatement();
             String sql = "   create table if not exists card(" +
+                    "        id serial," +
                     "        card_number varchar(16) primary key," +
                     "        expire_date date," +
                     "        balance double precision," +
@@ -60,6 +62,7 @@ public class DatabaseUtil {
             Connection con = DatabaseUtil.getConnection();
             Statement statement = con.createStatement();
             String sql = "   create table if not exists terminal(" +
+                    "        id serial," +
                     "        code varchar  primary key," +
                     "        address varchar not null," +
                     "        status varchar default  'ACTIVE'," +
@@ -77,6 +80,7 @@ public class DatabaseUtil {
             Connection con = DatabaseUtil.getConnection();
             Statement statement = con.createStatement();
             String sql = "   create table if not exists Transaction(" +
+                    "        id serial," +
                     "        card_number varchar(16)  references card(card_number)," +
                     "        amount double precision, " +
                     "        terminal_code varchar references terminal(code)," +
