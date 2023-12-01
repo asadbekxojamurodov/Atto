@@ -22,7 +22,7 @@ public class DatabaseUtil {
             Connection con = DatabaseUtil.getConnection();
             Statement statement = con.createStatement();
             String sql = "  create table if not exists Profile(" +
-                    "        id serial," +
+                    "        id serial primary key," +
                     "        name varchar not null," +
                     "        surname varchar not null," +
                     "        phone varchar(13) primary key," +

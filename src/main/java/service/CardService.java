@@ -1,5 +1,6 @@
 package service;
 
+import RandomUtils.RandomUtil;
 import dto.CardDto;
 import dto.ProfileDto;
 import enums.Status;
@@ -15,14 +16,21 @@ import java.util.List;
 public class CardService {
     CardRepository cardRepository = new CardRepository();
     ProfileRepository profileRepository = new ProfileRepository();
+    String cardNumber;
+    long smallest = 1000_0000_0000_0000L;
+    long biggest = 9999_9999_9999_9999L;
     boolean bool;
 
-    public boolean createCard(CardDto card) {
-
+    public boolean createCard() {
+        CardDto card = new CardDto();
+        cardNumber = String.valueOf(RandomUtil.getRandomNumber(smallest, biggest));
+        card.setCardNumber(cardNumber);
+        card.setExpireDate(LocalDate.now());
+        card.setBalance(0.0);
         card.setStatus(Status.NO_ACTIVE);
         card.setCreatedDate(LocalDateTime.now());
-        cardRepository.createCard(card);
-        return false;
+
+        return cardRepository.createCard(card);
     }
 
     public void getCardList() {
@@ -30,33 +38,30 @@ public class CardService {
         for (CardDto cardDto : allCard) {
             System.out.println(cardDto);
         }
-
     }
 
     public boolean addCard(ProfileDto profileDto) {
-        boolean bool = false;
+
         List<ProfileDto> allProfile = profileRepository.getAllProfile();
+
         for (ProfileDto dto : allProfile) {
             if (profileDto.getName().equals(dto.getName()) && profileDto.getSurname().equals(dto.getSurname()) && profileDto.getPhone().equals(dto.getPhone())) {
-                 bool = setCardForUser(profileDto);
-                return bool;
+                return setCardForUser(profileDto);
             }
         }
         return false;
     }
 
     public boolean setCardForUser(ProfileDto profileDto) {
-        boolean bool = false;
-        List<CardDto> cardDtoList = cardRepository.getAllCard();
-        for (CardDto cardDto : cardDtoList) {
-            if (cardDto.getStatus().equals(Status.NO_ACTIVE)) {
-                cardDto.setPhone(profileDto.getPhone());
-                cardDto.setExpireDate(LocalDate.now().plusYears(3l));
-                cardDto.setStatus(Status.ACTIVE);
+        String cardNumber;
+        List<CardDto> allNoActiveCardList = cardRepository.getAllNoActiveCardList();
 
-                bool = cardRepository.addCard(cardDto);
-                return bool;
-            }
+        for (CardDto cardDto : allNoActiveCardList) {
+
+            cardDto.setPhone(profileDto.getPhone());
+            cardDto.setStatus(Status.ACTIVE);
+            cardNumber = cardDto.getCardNumber();
+            return cardRepository.addCard(cardDto, cardNumber);
         }
         return false;
     }
@@ -73,21 +78,38 @@ public class CardService {
     }
 
     public boolean deleteCard(CardDto cardDto) {
-        Boolean bool = null;
+
         List<CardDto> cardDtoList = cardRepository.getAllCard();
         for (CardDto dto : cardDtoList) {
             if (dto.getCardNumber().equals(cardDto.getCardNumber())) {
-//                cardDto.setCardNumber(dto.getCardNumber());
                 cardDto.setStatus(Status.BLOCKED);
-                bool = cardRepository.deleteCard(cardDto);
-                break;
+                cardDto.setCardNumber(dto.getCardNumber());
+               return cardRepository.deleteCard(cardDto);
             }
-        }
-        if (Boolean.TRUE.equals(bool)) {
-            return true;
         }
         return false;
     }
+
+    public void getMyCardList(ProfileDto profileDto) {
+        List<CardDto> allCard = cardRepository.getAllMyCard(profileDto.getPhone());
+        for (CardDto cardDto : allCard) {
+            System.out.println("CARD NUMBER < "+cardDto.getCardNumber() + " > EXPIRE DATE < " + cardDto.getExpireDate() + " > BALANCE < " + cardDto.getBalance()+" > status < " + cardDto.getStatus()+" >" );
+        }
+    }
+
+
+    public boolean changeCardStatus(String cardNumber,String phone) {
+
+        List<CardDto> allMyCard = cardRepository.getAllMyCard(phone);
+        for (CardDto cardDto : allMyCard) {
+            if (cardDto.getCardNumber().equals(cardNumber)){
+                return cardRepository.changeCardStatus(cardNumber);
+
+            }
+        }
+        return false;
+    }
+
 }
 
 

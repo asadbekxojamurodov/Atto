@@ -19,7 +19,6 @@ public class CardDto {
     private Status status;
     private String phone;
     private LocalDateTime createdDate;
-
 }
 
 
