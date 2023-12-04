@@ -13,11 +13,13 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class CardDto {
+    private Integer id;
     private String cardNumber;
     private LocalDate expireDate;
     private double balance;
     private Status status;
     private String phone;
+    private Boolean visible;
     private LocalDateTime createdDate;
 }
 

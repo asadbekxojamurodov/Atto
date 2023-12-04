@@ -12,9 +12,11 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class TerminalDto {
+    private Integer id;
     private String code;
     private String address;
     private Status statusTerminal;
+    private boolean visible;
     private LocalDateTime createdDate;
 
 }

@@ -12,10 +12,14 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 public class TransactionDto {
-//    4. Transaction (card_number,amount,terminal_code,type,created_date)
-private String cardNumber;
-private double amount;
-private String terminalId;
-private TransactionType transactionType;
-private LocalDateTime created_date;
+
+    private Integer id;
+    private Integer cardId;
+    private String cardNumber;
+    private Double amount;
+    private String terminalCode;
+    private TransactionType transactionType;
+    private String phone;
+    private LocalDateTime createdDate;
+
 }

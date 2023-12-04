@@ -17,11 +17,11 @@ public class DatabaseUtil {
         }
     }
 
-    public void createProfileTable(){
+    public  void createProfileTable(){
         try {
             Connection con = DatabaseUtil.getConnection();
             Statement statement = con.createStatement();
-            String sql = "  create table if not exists Profile(" +
+            String sql = "  create table if not exists profile(" +
                     "        id serial primary key," +
                     "        name varchar not null," +
                     "        surname varchar not null," +
@@ -42,12 +42,13 @@ public class DatabaseUtil {
             Connection con = DatabaseUtil.getConnection();
             Statement statement = con.createStatement();
             String sql = "   create table if not exists card(" +
-                    "        id serial," +
+                    "        id serial ," +
                     "        card_number varchar(16) primary key," +
                     "        expire_date date," +
                     "        balance double precision," +
                     "        status varchar default  'NO_ACTIVE'," +
                     "        phone varchar(13) references profile (phone)," +
+                    "        visible boolean default true, " +
                     "        created_date timestamp default now()" +
                     "      );";
             statement.executeUpdate(sql);
@@ -63,9 +64,10 @@ public class DatabaseUtil {
             Statement statement = con.createStatement();
             String sql = "   create table if not exists terminal(" +
                     "        id serial," +
-                    "        code varchar  primary key," +
+                    "        code varchar primary key," +
                     "        address varchar not null," +
                     "        status varchar default  'ACTIVE'," +
+                    "        visible boolean default true, " +
                     "        created_date timestamp default now()" +
                     "      );";
             statement.executeUpdate(sql);
@@ -79,11 +81,13 @@ public class DatabaseUtil {
         try {
             Connection con = DatabaseUtil.getConnection();
             Statement statement = con.createStatement();
-            String sql = "   create table if not exists Transaction(" +
+            String sql = "   create table if not exists transaction(" +
                     "        id serial," +
+                    "        card_id int not null," +
+                    "        phone varchar not null," +
                     "        card_number varchar(16)  references card(card_number)," +
-                    "        amount double precision, " +
                     "        terminal_code varchar references terminal(code)," +
+                    "        amount double precision, " +
                     "        transaction_type varchar not null, " +
                     "        created_date timestamp default now()" +
                     "      );";
@@ -93,6 +97,7 @@ public class DatabaseUtil {
             throw new RuntimeException(e);
         }
     }
+
 
 
 }
